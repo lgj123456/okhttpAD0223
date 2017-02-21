@@ -1,7 +1,6 @@
 package com.example.yhdj.ad0223;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,6 +13,8 @@ import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.BitmapCallback;
 
 import java.io.IOException;
 
@@ -67,22 +68,47 @@ public class MainActivity extends AppCompatActivity {
         btnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OkHttpClient okHttpClient = new OkHttpClient();
-                Request request = new Request.Builder().url(urlImg).build();
-                Call call = okHttpClient.newCall(request);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
+                //第一种方法用okhttp加载图片
+//                        OkHttpClient okHttpClient = new OkHttpClient();
+//                        Request request = new Request.Builder().url(urlImg).build();
+//                        Call call = okHttpClient.newCall(request);
+//                        call.enqueue(new Callback() {
+//                            @Override
+//                            public void onFailure(Request request, IOException e) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onResponse(Response response) throws IOException {
+//                                byte[] byt  = response.body().bytes();
+//                                final Bitmap bitmap = BitmapFactory.decodeByteArray(byt,0,byt.length);
+//                                runOnUiThread(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        img.setImageBitmap(bitmap);
+//                                    }
+//                                });
+//                    }
+//                });
 
-                    }
+                //第二种方法用OkHttpUtils加载图片
+                OkHttpUtils
+                        .get()//
+                        .url(urlImg)//
+                        .build()//
+                        .execute(new BitmapCallback()
+                        {
 
-                    @Override
-                    public void onResponse(Response response) throws IOException {
-                       byte[] byt  = response.body().bytes();
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(byt,0,byt.length);
-                        img.setImageBitmap(bitmap);
-                    }
-                });
+                            @Override
+                            public void onError(okhttp3.Call call, Exception e, int id) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Bitmap response, int id) {
+                                img.setImageBitmap(response);
+                            }
+                        });
             }
         });
     }

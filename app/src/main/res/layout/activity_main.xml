@@ -18,12 +18,14 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:id="@+id/btn_loadTxt"
+            android:text="加载文字"
             />
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:id="@+id/btn_loadImg"
+            android:text="加载图片"
             />
     </LinearLayout>
 
