@@ -1,5 +1,7 @@
 package com.example.yhdj.ad0223;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -65,7 +67,22 @@ public class MainActivity extends AppCompatActivity {
         btnImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request request = new Request.Builder().url(urlImg).build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Request request, IOException e) {
 
+                    }
+
+                    @Override
+                    public void onResponse(Response response) throws IOException {
+                       byte[] byt  = response.body().bytes();
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(byt,0,byt.length);
+                        img.setImageBitmap(bitmap);
+                    }
+                });
             }
         });
     }
